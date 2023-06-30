@@ -1,0 +1,93 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module traffic( input clk, output reg [2:0] light    );
+ 
+ parameter s0=0, s1=1, s2=2;
+ parameter RED= 3'b100, GREEN =3'b010, YELLOW=3'b001;
+ reg [1:0] state;
+ always@(posedge clk)
+ begin
+    case(state)
+        s0: begin
+            light<=RED;
+            state<=s1;
+        end
+        
+        s1: begin
+            light<=GREEN;
+            state<=s2;
+        end
+        
+        s2: begin
+            light<=YELLOW;
+            state<=s0;
+        end
+        default: begin
+            state<=s0;
+            light<=RED;
+        end
+     
+    endcase
+ end
+
+endmodule
+// tbb
+
+
+
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 06/29/2023 10:47:24 AM
+// Design Name: 
+// Module Name: test_ttaffic
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module test_ttaffic(    );
+wire [2:0 ]light;
+reg clk;
+reg [2:0] action;
+parameter [29:0] RED="RED";
+parameter [29:0] GREEN="GREEN";
+parameter [29:0] YELOOW= "YELOOW";
+
+always@(light)
+begin
+    case(light)
+        3'b001: action = RED;
+        3'b010 :action = GREEN;
+        3'b100 :action = YELOOW;
+     endcase
+end
+
+traffic u1(clk, light);
+
+initial #10000 $finish;
+initial begin
+    clk=1'b0;
+   forever  #5clk= ~clk;
+end
+
+endmodule
